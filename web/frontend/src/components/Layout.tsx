@@ -72,15 +72,15 @@ const Layout = () => {
                     backgroundColor: 'primary.main'
                 }}
             >
-                <Avatar
+                <Box
+                    component="img"
                     src={logo}
                     alt="SIPEX Logo"
                     sx={{
-                        width: 60,
-                        height: 60,
+                        width: 80,
+                        height: 'auto',
                         mb: 1,
-                        bgcolor: 'white',
-                        p: 1
+                        objectFit: 'contain'
                     }}
                 />
                 <Typography variant="h6" noWrap component="div" sx={{ color: 'white' }}>
@@ -90,7 +90,14 @@ const Layout = () => {
             <Divider />
             <List>
                 <ListItem disablePadding>
-                    <ListItemButton onClick={() => navigate('/dashboard')}>
+                    <ListItemButton
+                        onClick={() => navigate('/dashboard')}
+                        sx={{
+                            '&:hover': {
+                                backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                            },
+                        }}
+                    >
                         <ListItemIcon>
                             <DashboardIcon />
                         </ListItemIcon>
@@ -98,7 +105,14 @@ const Layout = () => {
                     </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
-                    <ListItemButton onClick={() => navigate('/requisicoes')}>
+                    <ListItemButton
+                        onClick={() => navigate('/requisicoes')}
+                        sx={{
+                            '&:hover': {
+                                backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                            },
+                        }}
+                    >
                         <ListItemIcon>
                             <DescriptionIcon />
                         </ListItemIcon>
@@ -107,7 +121,14 @@ const Layout = () => {
                 </ListItem>
                 {isAdmin && (
                     <ListItem disablePadding>
-                        <ListItemButton onClick={() => navigate('/usuarios')}>
+                        <ListItemButton
+                            onClick={() => navigate('/usuarios')}
+                            sx={{
+                                '&:hover': {
+                                    backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                                },
+                            }}
+                        >
                             <ListItemIcon>
                                 <PeopleIcon />
                             </ListItemIcon>
@@ -128,6 +149,7 @@ const Layout = () => {
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
                     ml: { sm: `${drawerWidth}px` },
                     backgroundColor: 'primary.main',
+                    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
                 }}
             >
                 <Toolbar>
@@ -216,7 +238,11 @@ const Layout = () => {
                     variant="permanent"
                     sx={{
                         display: { xs: 'none', sm: 'block' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                        '& .MuiDrawer-paper': {
+                            boxSizing: 'border-box',
+                            width: drawerWidth,
+                            borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+                        },
                     }}
                     open
                 >
