@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Box,
@@ -57,26 +57,48 @@ const Login = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setCredenciais(prev => ({ ...prev, [name]: value }));
+        // Limpar mensagem de erro quando o usuário começa a digitar novamente
+        if (erro) setErro(null);
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    // Usando useCallback para memoizar a função
+    const handleSubmit = useCallback(async (e: React.FormEvent) => {
+        // Prevenção dupla do comportamento padrão
+        if (e && e.preventDefault) {
+            e.preventDefault();
+        }
+        if (e && e.stopPropagation) {
+            e.stopPropagation();
+        }
+
+        // Verificações básicas de entrada
+        if (!credenciais.usuario.trim() || !credenciais.senha.trim()) {
+            setErro('Por favor, preencha todos os campos.');
+            return false; // Retornando false também ajuda a prevenir submissão
+        }
+
         setErro(null);
         setCarregando(true);
 
         try {
             await authService.login(credenciais);
             navigate('/dashboard');
-        } catch (error: any) {
-            setErro(error.response?.data?.message || 'Erro ao realizar login. Verifique suas credenciais.');
+        } catch (error) {
+            console.error('Erro de login detalhado:', error);
+            setErro('Usuário ou senha incorreto.');
         } finally {
             setCarregando(false);
         }
-    };
+
+        return false; // Retornando false para garantir que não haja submissão
+    }, [credenciais, navigate]);
+
+    // Não precisamos mais de um handler separado para o botão
+    // já que o formulário agora trata a submissão corretamente
 
     return (
         <>
-            <CssBaseline /> {/* Reset de CSS do Material UI */}
+            <CssBaseline />
             <Box
                 sx={{
                     position: 'absolute',
@@ -144,12 +166,29 @@ const Login = () => {
                     </Typography>
 
                     {erro && (
-                        <Alert severity="error" sx={{ width: '100%', mb: 2 }}>
+                        <Alert
+                            severity="error"
+                            sx={{
+                                width: '100%',
+                                mb: 2,
+                                '& .MuiAlert-message': {
+                                    width: '100%',
+                                    textAlign: 'center'
+                                }
+                            }}
+                        >
                             {erro}
                         </Alert>
                     )}
 
-                    <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
+                    {/* Formulário com submissão por tecla Enter restaurada */}
+                    <Box
+                        component="form"
+                        onSubmit={(e) => { handleSubmit(e); return false; }}
+                        sx={{ width: '100%' }}
+                        noValidate
+                        autoComplete="off"
+                    >
                         <TextField
                             margin="normal"
                             required
@@ -163,6 +202,7 @@ const Login = () => {
                             onChange={handleChange}
                             variant="outlined"
                             sx={{ mb: 2 }}
+                            error={!!erro}
                         />
                         <TextField
                             margin="normal"
@@ -177,7 +217,9 @@ const Login = () => {
                             onChange={handleChange}
                             variant="outlined"
                             sx={{ mb: 3 }}
+                            error={!!erro}
                         />
+                        {/* Voltamos para type="submit" para permitir submissão por Enter */}
                         <Button
                             type="submit"
                             fullWidth

@@ -3,13 +3,17 @@ import { CredenciaisUsuario, RespostaUsuario } from '../types/usuario';
 
 export const authService = {
     async login(credenciais: CredenciaisUsuario): Promise<RespostaUsuario> {
-        const response = await api.post<RespostaUsuario>('/auth/login', credenciais);
-
-        // Armazenar token e dados do usuário no sessionStorage
-        sessionStorage.setItem('token', response.data.token);
-        sessionStorage.setItem('usuario', JSON.stringify(response.data));
-
-        return response.data;
+        try {
+            const response = await api.post<RespostaUsuario>('/auth/login', credenciais);
+            // Armazenar token e dados do usuário no sessionStorage
+            sessionStorage.setItem('token', response.data.token);
+            sessionStorage.setItem('usuario', JSON.stringify(response.data));
+            return response.data;
+        } catch (error) {
+            // Apenas propaga o erro para o componente que chamou esta função
+            // Não modifica o comportamento existente, apenas garante que o erro seja propagado
+            throw error;
+        }
     },
 
     logout(): void {
@@ -31,3 +35,5 @@ export const authService = {
         return usuario ? usuario.papel === role : false;
     }
 };
+
+export default authService;

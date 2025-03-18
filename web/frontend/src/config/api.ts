@@ -28,12 +28,28 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response && error.response.status === 401) {
-            // Redirecionar para login se o token expirou ou é inválido
+        // Verificar se é uma tentativa de login (não redirecionar neste caso)
+        const isLoginRequest = error.config &&
+            error.config.url &&
+            error.config.url.includes('/auth/login');
+
+        // Apenas redirecionar para login se NÃO for uma tentativa de login
+        // e o status for 401 (não autorizado)
+        if (error.response &&
+            error.response.status === 401 &&
+            !isLoginRequest) {
+            // Limpar dados de autenticação
             sessionStorage.removeItem('token');
             sessionStorage.removeItem('usuario');
-            window.location.href = '/login';
+
+            // Redirecionar para login se o token expirou ou é inválido
+            // e não estivermos já na página de login
+            if (window.location.pathname !== '/login') {
+                window.location.href = '/login';
+            }
         }
+
+        // Sempre propagar o erro para que os componentes possam tratá-lo
         return Promise.reject(error);
     }
 );
