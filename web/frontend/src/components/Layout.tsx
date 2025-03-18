@@ -24,8 +24,10 @@ import {
     Description as DescriptionIcon,
     People as PeopleIcon,
     AccountCircle as AccountCircleIcon,
+    Logout as LogoutIcon,
 } from '@mui/icons-material';
 import { authService } from '../services/authService';
+import logo from '../assets/logo.png';
 
 const drawerWidth = 240;
 
@@ -61,8 +63,27 @@ const Layout = () => {
 
     const drawer = (
         <div>
-            <Toolbar>
-                <Typography variant="h6" noWrap component="div">
+            <Toolbar
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    py: 2,
+                    backgroundColor: 'primary.main'
+                }}
+            >
+                <Avatar
+                    src={logo}
+                    alt="SIPEX Logo"
+                    sx={{
+                        width: 60,
+                        height: 60,
+                        mb: 1,
+                        bgcolor: 'white',
+                        p: 1
+                    }}
+                />
+                <Typography variant="h6" noWrap component="div" sx={{ color: 'white' }}>
                     SIPEX
                 </Typography>
             </Toolbar>
@@ -106,6 +127,7 @@ const Layout = () => {
                 sx={{
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
                     ml: { sm: `${drawerWidth}px` },
+                    backgroundColor: 'primary.main',
                 }}
             >
                 <Toolbar>
@@ -119,7 +141,7 @@ const Layout = () => {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-                        Sistema de Gestão de Requisições Periciais
+                        SIPEX - Sistema Integrado de Perícias e Exames
                     </Typography>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Typography variant="body1" sx={{ mr: 2 }}>
@@ -155,8 +177,19 @@ const Layout = () => {
                             open={Boolean(anchorEl)}
                             onClose={handleMenuClose}
                         >
-                            <MenuItem onClick={handleProfileClick}>Meu Perfil</MenuItem>
-                            <MenuItem onClick={handleLogout}>Sair</MenuItem>
+                            <MenuItem onClick={handleProfileClick}>
+                                <ListItemIcon>
+                                    <AccountCircleIcon fontSize="small" />
+                                </ListItemIcon>
+                                <ListItemText>Meu Perfil</ListItemText>
+                            </MenuItem>
+                            <Divider />
+                            <MenuItem onClick={handleLogout}>
+                                <ListItemIcon>
+                                    <LogoutIcon fontSize="small" />
+                                </ListItemIcon>
+                                <ListItemText>Sair</ListItemText>
+                            </MenuItem>
                         </Menu>
                     </Box>
                 </Toolbar>
@@ -192,7 +225,12 @@ const Layout = () => {
             </Box>
             <Box
                 component="main"
-                sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+                sx={{
+                    flexGrow: 1,
+                    p: 3,
+                    width: { sm: `calc(100% - ${drawerWidth}px)` },
+                    backgroundColor: 'background.default'
+                }}
             >
                 <Toolbar />
                 <Outlet />

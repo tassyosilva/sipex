@@ -1,23 +1,58 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Box,
     Button,
-    Container,
     TextField,
     Typography,
     Paper,
     Alert,
-    CircularProgress
+    CircularProgress,
+    CssBaseline
 } from '@mui/material';
 import { authService } from '../services/authService';
 import { CredenciaisUsuario } from '../types/usuario';
+import logo from '../assets/logo.png';
 
 const Login = () => {
     const navigate = useNavigate();
     const [credenciais, setCredenciais] = useState<CredenciaisUsuario>({ usuario: '', senha: '' });
     const [erro, setErro] = useState<string | null>(null);
     const [carregando, setCarregando] = useState(false);
+
+    // Adicionando um efeito para aplicar estilos diretamente ao body
+    useEffect(() => {
+        // Salvar os estilos originais
+        const originalStyle = {
+            margin: document.body.style.margin,
+            padding: document.body.style.padding,
+            overflow: document.body.style.overflow,
+            display: document.body.style.display,
+            height: document.body.style.height,
+            background: document.body.style.background
+        };
+
+        // Aplicar estilos para garantir centralização
+        document.body.style.margin = '0';
+        document.body.style.padding = '0';
+        document.body.style.overflow = 'hidden';
+        document.body.style.display = 'flex';
+        document.body.style.height = '100vh';
+        document.body.style.width = '100vw';
+        document.body.style.background = '#f0f0f0';
+        document.body.style.justifyContent = 'center';
+        document.body.style.alignItems = 'center';
+
+        // Limpar ao desmontar o componente
+        return () => {
+            document.body.style.margin = originalStyle.margin;
+            document.body.style.padding = originalStyle.padding;
+            document.body.style.overflow = originalStyle.overflow;
+            document.body.style.display = originalStyle.display;
+            document.body.style.height = originalStyle.height;
+            document.body.style.background = originalStyle.background;
+        };
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -40,31 +75,72 @@ const Login = () => {
     };
 
     return (
-        <Container component="main" maxWidth="xs">
+        <>
+            <CssBaseline /> {/* Reset de CSS do Material UI */}
             <Box
                 sx={{
-                    marginTop: 8,
+                    position: 'absolute',
+                    left: '50%',
+                    top: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '100%',
+                    maxWidth: '400px',
+                    height: 'auto',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: 0,
+                    padding: 0,
                 }}
             >
                 <Paper
-                    elevation={3}
+                    elevation={6}
                     sx={{
                         padding: 4,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
                         width: '100%',
+                        borderRadius: 2,
+                        backgroundColor: '#ffffff',
+                        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12)',
                     }}
                 >
-                    <Typography component="h1" variant="h5" sx={{ mb: 3 }}>
-                        SIPEX - Sistema de Gestão de Requisições Periciais
+                    <Box
+                        component="img"
+                        src={logo}
+                        alt="SIPEX Logo"
+                        sx={{
+                            width: 120,
+                            height: 'auto',
+                            mb: 3,
+                            objectFit: 'contain'
+                        }}
+                    />
+
+                    <Typography
+                        component="h1"
+                        variant="h5"
+                        sx={{
+                            mb: 1,
+                            fontWeight: 'bold',
+                            color: '#000000',
+                            textAlign: 'center'
+                        }}
+                    >
+                        SIPEX
                     </Typography>
 
-                    <Typography component="h2" variant="h6" sx={{ mb: 3 }}>
-                        Login
+                    <Typography
+                        variant="subtitle1"
+                        sx={{
+                            mb: 3,
+                            color: '#333333',
+                            textAlign: 'center'
+                        }}
+                    >
+                        Sistema Integrado de Perícias e Exames
                     </Typography>
 
                     {erro && (
@@ -73,7 +149,7 @@ const Login = () => {
                         </Alert>
                     )}
 
-                    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1, width: '100%' }}>
+                    <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
                         <TextField
                             margin="normal"
                             required
@@ -85,6 +161,8 @@ const Login = () => {
                             autoFocus
                             value={credenciais.usuario}
                             onChange={handleChange}
+                            variant="outlined"
+                            sx={{ mb: 2 }}
                         />
                         <TextField
                             margin="normal"
@@ -97,20 +175,36 @@ const Login = () => {
                             autoComplete="current-password"
                             value={credenciais.senha}
                             onChange={handleChange}
+                            variant="outlined"
+                            sx={{ mb: 3 }}
                         />
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
+                            sx={{
+                                mt: 2,
+                                mb: 2,
+                                py: 1.5,
+                                backgroundColor: '#D4AF37',
+                                color: '#000000',
+                                fontWeight: 'bold',
+                                '&:hover': {
+                                    backgroundColor: '#C5A028',
+                                }
+                            }}
                             disabled={carregando}
                         >
                             {carregando ? <CircularProgress size={24} /> : 'Entrar'}
                         </Button>
                     </Box>
+
+                    <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 2 }}>
+                        © {new Date().getFullYear()} SIPEX - Todos os direitos reservados
+                    </Typography>
                 </Paper>
             </Box>
-        </Container>
+        </>
     );
 };
 

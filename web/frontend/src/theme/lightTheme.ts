@@ -2,44 +2,40 @@ import { createTheme } from '@mui/material/styles';
 
 const lightTheme = createTheme({
   palette: {
-    mode: 'light',
     primary: {
-      main: '#1976d2',
+      main: '#000000', // Preto
+      light: '#333333',
+      dark: '#000000',
+      contrastText: '#ffffff',
     },
     secondary: {
-      main: '#dc004e',
+      main: '#D4AF37', // Dourado
+      light: '#E5C158',
+      dark: '#B3941E',
+      contrastText: '#000000',
     },
     background: {
       default: '#f5f5f5',
       paper: '#ffffff',
     },
-  },
-  typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    h1: {
-      fontWeight: 500,
-    },
-    h2: {
-      fontWeight: 500,
-    },
-    h3: {
-      fontWeight: 500,
+    text: {
+      primary: '#000000',
+      secondary: '#555555',
     },
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
+          borderRadius: 4,
           textTransform: 'none',
-          borderRadius: 8,
         },
       },
     },
-    MuiCard: {
+    MuiAppBar: {
       styleOverrides: {
         root: {
-          borderRadius: 12,
-          boxShadow: '0px 3px 6px rgba(0, 0, 0, 0.1)',
+          backgroundColor: '#000000',
         },
       },
     },
