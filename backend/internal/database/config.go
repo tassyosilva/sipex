@@ -12,10 +12,10 @@ import (
 func ConnectDB() (*sql.DB, error) {
 	// Obter configurações do banco de dados das variáveis de ambiente
 	// ou usar valores padrão para desenvolvimento
-	host := getEnv("DB_HOST", "localhost")
+	host := getEnv("DB_HOST", "192.168.1.106")
 	port := getEnv("DB_PORT", "5432")
 	user := getEnv("DB_USER", "postgres")
-	password := getEnv("DB_PASSWORD", "postgres")
+	password := getEnv("DB_PASSWORD", "123456")
 	dbname := getEnv("DB_NAME", "sipex_db")
 	
 	// Construir string de conexão

@@ -1,4 +1,4 @@
-module github.com/seu-usuario/iml-system
+module github.com/tassyosilva/sipex
 
 go 1.22
 

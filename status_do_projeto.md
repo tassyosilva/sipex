@@ -82,3 +82,16 @@ Vamos atualizar o status do projeto para refletir o progresso:
 2. Criar o handler de autenticação
 3. Implementar o middleware de autenticação
 4. Iniciar a configuração do frontend
+
+## Atualização: 2023-11-23
+- Implementado o repositório de usuários
+- Criado o handler de autenticação
+- Implementado o middleware de autenticação
+- Criado o handler de usuários
+- Configuradas as rotas da API
+
+## Próximos Passos
+1. Iniciar a configuração do frontend (com tema claro)
+2. Implementar a tela de login
+3. Implementar o dashboard básico
+4. Implementar a gestão de usuários no frontend
